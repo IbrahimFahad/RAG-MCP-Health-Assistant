@@ -1,0 +1,42 @@
+# Claude API
+anthropic>=0.40.0
+
+# Vector Database
+supabase>=2.0.0
+
+# Embedding Model (multilingual-e5-large)
+sentence-transformers>=3.0.0
+torch>=2.0.0
+
+# Backend
+fastapi>=0.115.0
+uvicorn>=0.30.0
+pydantic>=2.0.0
+httpx>=0.27.0
+python-dotenv>=1.0.0
+
+# Frontend
+streamlit>=1.40.0
+
+# Web Search
+tavily-python>=0.5.0
+
+# Web Scraping
+beautifulsoup4>=4.12.0
+requests>=2.32.0
+firecrawl-py>=1.0.0
+
+# PubMed / Medical Literature
+biopython>=1.84
+
+# Language Detection
+langdetect>=1.0.9
+
+# Text Chunking
+nltk>=3.9.0
+
+# PDF Loading
+pymupdf>=1.24.0
+
+# Utilities
+numpy>=1.26.0
