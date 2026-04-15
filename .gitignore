@@ -9,4 +9,6 @@ venv/
 .DS_Store
 data/raw/
 data/processed/
+data/medicines/
+new-service/
 *.log
