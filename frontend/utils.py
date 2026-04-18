@@ -180,7 +180,9 @@ def render_sidebar(active: str = "home") -> str:
             ("calculators",   "⚖️", "Health Calculators",  "الحاسبات الصحية",       "pages/calculators"),
             ("lab_reader",    "🩸", "Lab Results Reader",  "قارئ نتائج المختبر",    "pages/lab_reader"),
             ("triage",        "🚑", "Emergency Triage",    "الفرز الطارئ",          "pages/triage"),
-            ("medicine_info", "💊", "Medicine Info",       "معلومات الأدوية",       "pages/medicine_info"),
+            ("medicine_info",          "💊", "Medicine Info",             "معلومات الأدوية",              "pages/medicine_info"),
+            ("food_nutrition_scanner", "🥗", "Food Nutrition Scanner",    "ماسح التغذية الغذائية",        "pages/food_nutrition_scanner"),
+            ("nutrition_scanner",      "📸", "Nutrition Label Scanner",   "ماسح ملصق القيم الغذائية",    "pages/nutrition_scanner"),
         ]
 
         for key, icon, label_en, label_ar, page_path in pages:
@@ -191,15 +193,6 @@ def render_sidebar(active: str = "home") -> str:
             if not is_active:
                 if st.button(f"{icon} {label}", key=f"nav_{key}", use_container_width=True):
                     st.switch_page(f"{page_path}.py")
-
-        st.markdown(f'<div class="nav-section-title">{"COMING SOON" if lang == "en" else "قريباً"}</div>', unsafe_allow_html=True)
-
-        coming_soon = [
-            ("📸", "Nutrition Scanner", "ماسح التغذية"),
-        ]
-        for icon, label_en, label_ar in coming_soon:
-            label = label_ar if lang == "ar" else label_en
-            st.markdown(f'<div class="nav-item" style="opacity:0.45; cursor:default;">{icon} {label}</div>', unsafe_allow_html=True)
 
         # Footer
         st.markdown("""

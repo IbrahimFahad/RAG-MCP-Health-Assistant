@@ -67,16 +67,17 @@ with col2:
 
 with col3:
     st.markdown(f"""
-    <div class="service-card coming-soon">
-        <div class="card-icon">📸</div>
-        <h3>{"Nutrition Scanner" if lang == "en" else "ماسح التغذية"}</h3>
-        <p>{"Scan food nutrition labels and get instant AI-powered dietary feedback."
+    <div class="service-card available">
+        <div class="card-icon">🥗</div>
+        <h3>{"Food Nutrition Scanner" if lang == "en" else "ماسح التغذية الغذائية"}</h3>
+        <p>{"Enter any food or meal to get a detailed nutritional breakdown — calories, macros, micros, and health tips."
             if lang == "en" else
-            "امسح ملصقات التغذية على الأطعمة واحصل على تغذية راجعة فورية."}</p>
-        <span class="badge-coming">{"Coming Soon" if lang == "en" else "قريباً"}</span>
+            "أدخل أي طعام أو وجبة للحصول على تحليل غذائي مفصّل — سعرات، مغذيات كبرى ودقيقة، ونصائح صحية."}</p>
+        <span class="badge-available">{"Available" if lang == "en" else "متاح"}</span>
     </div>
     """, unsafe_allow_html=True)
-    st.button("🔒 " + ("Coming Soon" if lang == "en" else "قريباً"), use_container_width=True, key="btn_nutrition", disabled=True)
+    if st.button("🥗 " + ("Open Food Scanner" if lang == "en" else "فتح ماسح التغذية"), use_container_width=True, key="btn_food_nutrition"):
+        st.switch_page("pages/food_nutrition_scanner.py")
 
 col4, col5, col6 = st.columns(3)
 
@@ -121,6 +122,22 @@ with col6:
     """, unsafe_allow_html=True)
     if st.button("💊 " + ("Open Medicine Info" if lang == "en" else "فتح معلومات الأدوية"), use_container_width=True, key="btn_med"):
         st.switch_page("pages/medicine_info.py")
+
+col7, col8, col9 = st.columns(3)
+
+with col7:
+    st.markdown(f"""
+    <div class="service-card available">
+        <div class="card-icon">📸</div>
+        <h3>{"Nutrition Label Scanner" if lang == "en" else "ماسح ملصق القيم الغذائية"}</h3>
+        <p>{"Photograph a food nutrition label — AI reads every value, then you can chat with it about your diet."
+            if lang == "en" else
+            "صوّر ملصق القيم الغذائية — يقرأ الذكاء الاصطناعي كل القيم ثم يمكنك التحدث معه عن نظامك الغذائي."}</p>
+        <span class="badge-available">{"Available" if lang == "en" else "متاح"}</span>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("📸 " + ("Open Label Scanner" if lang == "en" else "فتح ماسح الملصق"), use_container_width=True, key="btn_label_scanner"):
+        st.switch_page("pages/nutrition_scanner.py")
 
 # ── Stats bar ─────────────────────────────────────────────────────────────────
 st.markdown("<br>", unsafe_allow_html=True)
