@@ -13,6 +13,9 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 # Web Search
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
+# OpenWeatherMap (Outdoor Activity Advisor)
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
+
 # Web Scraping
 FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY")
 

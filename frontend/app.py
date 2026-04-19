@@ -39,7 +39,7 @@ st.markdown(f"""
         </p>
         <div style="display:flex;gap:24px;flex-wrap:wrap;">
             <div>
-                <div style="font-size:1.3rem;font-weight:700;color:#f7f7f7;">7</div>
+                <div style="font-size:1.3rem;font-weight:700;color:#f7f7f7;">9</div>
                 <div style="font-size:10px;color:rgba(255,255,255,0.7);">{"AI Services" if lang == "en" else "خدمات ذكاء اصطناعي"}</div>
             </div>
             <div>
@@ -154,17 +154,19 @@ with c7:
         st.switch_page("pages/nutrition_scanner.py")
 
 with c8:
-    st.markdown(_card("🧬","#e8f5f0",
-        t("Coming Soon","قريباً",lang),
-        t("A new health service is on the way. Stay tuned!",
-          "خدمة صحية جديدة قادمة قريباً. ترقّبوا!",lang),
-        badge_soon, coming=True), unsafe_allow_html=True)
-    st.button("🔒 "+t("Coming Soon","قريباً",lang), key="btn_cs1", use_container_width=True, disabled=True)
+    st.markdown(_card("🌤️","#e0f2fe",
+        t("Outdoor Activity Advisor","مستشار النشاط الخارجي",lang),
+        t("Check real-time air quality & weather before running or walking — ideal for asthma & allergy patients.",
+          "تحقق من جودة الهواء والطقس قبل الجري أو المشي — مثالي لمرضى الربو وحساسية الصدر.",lang),
+        badge_ok), unsafe_allow_html=True)
+    if st.button("🌤️ "+t("Open","فتح",lang), key="btn_outdoor", use_container_width=True):
+        st.switch_page("pages/outdoor_activity.py")
 
 with c9:
-    st.markdown(_card("🔬","#e8f5f0",
-        t("Coming Soon","قريباً",lang),
-        t("A new health service is on the way. Stay tuned!",
-          "خدمة صحية جديدة قادمة قريباً. ترقّبوا!",lang),
-        badge_soon, coming=True), unsafe_allow_html=True)
-    st.button("🔒 "+t("Coming Soon","قريباً",lang), key="btn_cs2", use_container_width=True, disabled=True)
+    st.markdown(_card("⚗️","#fde8f5",
+        t("Drug Interaction Checker","فاحص التفاعلات الدوائية",lang),
+        t("Enter your daily medications to detect dangerous drug-drug interactions and get safety alerts.",
+          "أدخل أدويتك اليومية للكشف عن التفاعلات الدوائية الخطيرة واستقبال تحذيرات السلامة.",lang),
+        badge_ok), unsafe_allow_html=True)
+    if st.button("⚗️ "+t("Open","فتح",lang), key="btn_drugix", use_container_width=True):
+        st.switch_page("pages/drug_interactions.py")

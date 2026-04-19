@@ -393,14 +393,16 @@ def render_sidebar(active: str = "home") -> str:
 
         # Navigation
         pages = [
-            ("home",                   "🏠", "Home",                    "الرئيسية",                  "app"),
-            ("chat",                   "🩺", "Health Q&A",              "الأسئلة الصحية",            "pages/chat"),
-            ("calculators",            "⚖️", "Health Calculators",      "الحاسبات الصحية",           "pages/calculators"),
-            ("lab_reader",             "🩸", "Lab Results Reader",      "قارئ نتائج المختبر",        "pages/lab_reader"),
-            ("triage",                 "🚑", "Emergency Triage",        "الفرز الطارئ",              "pages/triage"),
-            ("medicine_info",          "💊", "Medicine Info",           "معلومات الأدوية",           "pages/medicine_info"),
-            ("food_nutrition_scanner", "🥗", "Food Nutrition Scanner",  "ماسح التغذية الغذائية",     "pages/food_nutrition_scanner"),
-            ("nutrition_scanner",      "📸", "Nutrition Label Scanner", "ماسح ملصق القيم الغذائية", "pages/nutrition_scanner"),
+            ("home",                   "🏠", "Home",                      "الرئيسية",                    "app"),
+            ("chat",                   "🩺", "Health Q&A",                "الأسئلة الصحية",              "pages/chat"),
+            ("calculators",            "⚖️", "Health Calculators",        "الحاسبات الصحية",             "pages/calculators"),
+            ("lab_reader",             "🩸", "Lab Results Reader",        "قارئ نتائج المختبر",          "pages/lab_reader"),
+            ("triage",                 "🚑", "Emergency Triage",          "الفرز الطارئ",                "pages/triage"),
+            ("medicine_info",          "💊", "Medicine Info",             "معلومات الأدوية",             "pages/medicine_info"),
+            ("food_nutrition_scanner", "🥗", "Food Nutrition Scanner",    "ماسح التغذية الغذائية",       "pages/food_nutrition_scanner"),
+            ("nutrition_scanner",      "📸", "Nutrition Label Scanner",   "ماسح ملصق القيم الغذائية",   "pages/nutrition_scanner"),
+            ("outdoor_activity",       "🌤️", "Outdoor Activity Advisor",  "مستشار النشاط الخارجي",      "pages/outdoor_activity"),
+            ("drug_interactions",      "⚗️", "Drug Interaction Checker",  "فاحص التفاعلات الدوائية",    "pages/drug_interactions"),
         ]
 
         for key, icon, label_en, label_ar, page_path in pages:
