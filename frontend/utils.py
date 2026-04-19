@@ -57,6 +57,33 @@ def apply_global_styles():
     background: var(--bg) !important;
 }}
 
+/* ── Hide Streamlit auto-generated page nav ── */
+[data-testid="stSidebarNav"] {{
+    display: none !important;
+}}
+
+/* ── Keep sidebar toggle always visible ── */
+[data-testid="collapsedControl"] {{
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: #3dbf94 !important;
+    border-radius: 0 10px 10px 0 !important;
+    padding: 10px 6px !important;
+    box-shadow: 2px 0 8px rgba(61,191,148,0.35) !important;
+    top: 50% !important;
+}}
+[data-testid="collapsedControl"] svg {{
+    fill: white !important;
+    color: white !important;
+    stroke: white !important;
+}}
+[data-testid="collapsedControl"] button {{
+    background: transparent !important;
+    border: none !important;
+    color: white !important;
+}}
+
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {{
     background: var(--sidebar) !important;

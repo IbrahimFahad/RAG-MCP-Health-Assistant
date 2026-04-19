@@ -88,8 +88,8 @@ with c1:
         t("Ask any health question in Arabic or English. Powered by AI + trusted medical sources.",
           "اسأل أي سؤال صحي. مدعوم بالذكاء الاصطناعي ومصادر طبية موثوقة.",lang),
         badge_ok), unsafe_allow_html=True)
-    st.button("🩺 "+t("Open","فتح",lang), key="btn_chat", use_container_width=True,
-              on_click=lambda: st.switch_page("pages/chat.py"))
+    if st.button("🩺 "+t("Open","فتح",lang), key="btn_chat", use_container_width=True):
+        st.switch_page("pages/chat.py")
 
 with c2:
     st.markdown(_card("⚖️","#e8f8ee",
@@ -97,8 +97,8 @@ with c2:
         t("Calculate BMI, daily calorie needs, and ideal body weight instantly.",
           "احسب مؤشر كتلة الجسم والسعرات الحرارية اليومية والوزن المثالي.",lang),
         badge_ok), unsafe_allow_html=True)
-    st.button("⚖️ "+t("Open","فتح",lang), key="btn_calc", use_container_width=True,
-              on_click=lambda: st.switch_page("pages/calculators.py"))
+    if st.button("⚖️ "+t("Open","فتح",lang), key="btn_calc", use_container_width=True):
+        st.switch_page("pages/calculators.py")
 
 with c3:
     st.markdown(_card("🩸","#ede8fb",
@@ -106,8 +106,8 @@ with c3:
         t("Upload your blood test PDF — get a plain-language explanation of every value.",
           "ارفع ملف PDF لنتائج الدم واحصل على شرح مبسط لكل قيمة.",lang),
         badge_ok), unsafe_allow_html=True)
-    st.button("🩸 "+t("Open","فتح",lang), key="btn_lab", use_container_width=True,
-              on_click=lambda: st.switch_page("pages/lab_reader.py"))
+    if st.button("🩸 "+t("Open","فتح",lang), key="btn_lab", use_container_width=True):
+        st.switch_page("pages/lab_reader.py")
 
 st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
@@ -119,8 +119,8 @@ with c4:
         t("Answer guided yes/no questions — find out how urgently you need medical care.",
           "أجب على أسئلة موجّهة لمعرفة مدى إلحاح حاجتك للرعاية الطبية.",lang),
         badge_ok), unsafe_allow_html=True)
-    st.button("🚑 "+t("Open","فتح",lang), key="btn_triage", use_container_width=True,
-              on_click=lambda: st.switch_page("pages/triage.py"))
+    if st.button("🚑 "+t("Open","فتح",lang), key="btn_triage", use_container_width=True):
+        st.switch_page("pages/triage.py")
 
 with c5:
     st.markdown(_card("💊","#fdeaf0",
@@ -128,8 +128,8 @@ with c5:
         t("Ask about dosage, side effects, and drug interactions via AI chat.",
           "اسأل عن الجرعة والآثار الجانبية والتفاعلات عبر الدردشة الذكية.",lang),
         badge_ok), unsafe_allow_html=True)
-    st.button("💊 "+t("Open","فتح",lang), key="btn_med", use_container_width=True,
-              on_click=lambda: st.switch_page("pages/medicine_info.py"))
+    if st.button("💊 "+t("Open","فتح",lang), key="btn_med", use_container_width=True):
+        st.switch_page("pages/medicine_info.py")
 
 with c6:
     st.markdown(_card("🥗","#e8f8ee",
@@ -137,8 +137,8 @@ with c6:
         t("Type any food or meal — get a detailed breakdown of calories, macros & health tips.",
           "أدخل أي طعام أو وجبة للحصول على تحليل غذائي مفصّل.",lang),
         badge_ok), unsafe_allow_html=True)
-    st.button("🥗 "+t("Open","فتح",lang), key="btn_food", use_container_width=True,
-              on_click=lambda: st.switch_page("pages/food_nutrition_scanner.py"))
+    if st.button("🥗 "+t("Open","فتح",lang), key="btn_food", use_container_width=True):
+        st.switch_page("pages/food_nutrition_scanner.py")
 
 st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
@@ -150,8 +150,8 @@ with c7:
         t("Photograph a food label — AI reads every value, then chat about your diet.",
           "صوّر ملصق القيم الغذائية — يقرأ الذكاء الاصطناعي كل القيم ثم تحادثه.",lang),
         badge_ok), unsafe_allow_html=True)
-    st.button("📸 "+t("Open","فتح",lang), key="btn_label", use_container_width=True,
-              on_click=lambda: st.switch_page("pages/nutrition_scanner.py"))
+    if st.button("📸 "+t("Open","فتح",lang), key="btn_label", use_container_width=True):
+        st.switch_page("pages/nutrition_scanner.py")
 
 with c8:
     st.markdown(_card("🧬","#e8f5f0",
