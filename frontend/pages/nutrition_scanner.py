@@ -43,7 +43,7 @@ st.markdown("""
         box-shadow: 0 4px 16px rgba(0,0,0,0.06);
     }
     .nutrition-card h3 {
-        color: #0a2540;
+        color: var(--text);
         margin: 0 0 0.5rem 0;
         font-size: 1.1rem;
     }
@@ -63,18 +63,18 @@ st.markdown("""
     .macro-value {
         font-size: 1.6rem;
         font-weight: 700;
-        color: #0a2540;
+        color: var(--text);
         line-height: 1.2;
     }
     .macro-label {
         font-size: 0.78rem;
-        color: #64748b;
+        color: var(--text-muted);
         margin-top: 4px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
     .cal-highlight {
-        background: linear-gradient(135deg, #ff6b35 0%, #f7c948 100%);
+        background: linear-gradient(135deg, #3dbf94 0%, #2a8fa8 100%);
         color: #fff !important;
     }
     .cal-highlight .macro-value, .cal-highlight .macro-label {
@@ -86,20 +86,20 @@ st.markdown("""
     }
     .scan-header h1 {
         font-size: 2rem;
-        color: #0a2540;
+        color: var(--text);
     }
     .scan-header p {
-        color: #64748b;
+        color: var(--text-muted);
         font-size: 1rem;
     }
     .daily-total-bar {
-        background: linear-gradient(135deg, #0a2540 0%, #1a3a5c 100%);
+        background: linear-gradient(135deg, var(--text) 0%, #1a3a5c 100%);
         border-radius: 16px;
         padding: 1.25rem;
         color: white;
     }
     .daily-total-bar h3 {
-        color: #f7c948;
+        color: #2a8fa8;
         margin: 0 0 0.75rem 0;
     }
     .log-item {
@@ -107,22 +107,22 @@ st.markdown("""
         border-radius: 12px;
         padding: 1rem 1.25rem;
         margin-bottom: 0.6rem;
-        border-left: 4px solid #ff6b35;
+        border-left: 4px solid #3dbf94;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
     .log-item-name {
         font-weight: 600;
-        color: #0a2540;
+        color: var(--text);
     }
     .log-item-cal {
         font-weight: 700;
-        color: #ff6b35;
+        color: #3dbf94;
         font-size: 1.1rem;
     }
     .chat-bubble-user {
-        background: #0a2540;
+        background: var(--text);
         color: white;
         border-radius: 16px 16px 4px 16px;
         padding: 0.75rem 1rem;
@@ -133,13 +133,13 @@ st.markdown("""
     }
     .chat-bubble-ai {
         background: #f0f4f8;
-        color: #0a2540;
+        color: var(--text);
         border-radius: 16px 16px 16px 4px;
         padding: 0.75rem 1rem;
         margin: 0.5rem 0;
         max-width: 85%;
         font-size: 0.95rem;
-        border-left: 3px solid #ff6b35;
+        border-left: 3px solid #3dbf94;
     }
     .rtl {
         direction: rtl;
@@ -152,7 +152,7 @@ st.markdown("""
     }
     .rtl .chat-bubble-ai {
         border-left: none;
-        border-right: 3px solid #ff6b35;
+        border-right: 3px solid #3dbf94;
         border-radius: 16px 16px 4px 16px;
     }
 </style>
@@ -210,6 +210,29 @@ def render_macro_grid(data: dict, highlight_calories: bool = True):
             """, unsafe_allow_html=True)
 
 
+DV_REFERENCE = {
+    "total_fat_g": 78, "saturated_fat_g": 20, "cholesterol_mg": 300,
+    "sodium_mg": 2300, "total_carbohydrates_g": 275, "dietary_fiber_g": 28,
+    "added_sugars_g": 50, "protein_g": 50, "vitamin_d_mcg": 20,
+    "calcium_mg": 1300, "iron_mg": 18, "potassium_mg": 4700,
+}
+
+def _dv_badge(key: str, val) -> str:
+    if val is None or key not in DV_REFERENCE:
+        return ""
+    try:
+        pct = round(float(val) / DV_REFERENCE[key] * 100)
+    except (TypeError, ZeroDivisionError):
+        return ""
+    if pct <= 10:
+        bg, fg = "#e8f5f0", "#2a9e78"
+    elif pct <= 19:
+        bg, fg = "#fef3c7", "#854f0b"
+    else:
+        bg, fg = "#fdeaea", "#a32d2d"
+    return f"<span style='background:{bg};color:{fg};font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;'>{pct}% DV</span>"
+
+
 def render_full_table(data: dict):
     skip = {"product_name", "serving_size", "servings_per_container"}
     rows_html = ""
@@ -217,8 +240,16 @@ def render_full_table(data: dict):
         if key in skip:
             continue
         label = ar if lang == "ar" else en
-        val = _fmt(data.get(key))
-        rows_html += f"<tr><td style='padding:8px 12px;color:#334155;font-weight:500;'>{label}</td><td style='padding:8px 12px;text-align:right;font-weight:600;color:#0a2540;'>{val}</td></tr>"
+        raw = data.get(key)
+        val = _fmt(raw)
+        badge = _dv_badge(key, raw)
+        rows_html += (
+            f"<tr style='border-bottom:1px solid var(--border);'>"
+            f"<td style='padding:8px 12px;color:var(--text-mid);font-weight:500;'>{label}</td>"
+            f"<td style='padding:8px 12px;font-weight:600;color:var(--text);'>{val}</td>"
+            f"<td style='padding:8px 12px;text-align:right;'>{badge}</td>"
+            f"</tr>"
+        )
 
     st.markdown(f"""
     <div class="nutrition-card">
@@ -226,6 +257,9 @@ def render_full_table(data: dict):
         <table style="width:100%;border-collapse:collapse;">
             {rows_html}
         </table>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:8px;">
+            * {t("% Daily Value based on a 2,000 calorie diet","% القيمة اليومية مبنية على نظام غذائي 2000 سعرة",lang)}
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -417,7 +451,7 @@ with tab_scan:
             st.markdown(f"""
             <div class="nutrition-card" style="text-align:center;padding:3rem;">
                 <p style="font-size:3rem;margin-bottom:0.5rem;">📸</p>
-                <p style="color:#64748b;">{t(
+                <p style="color:var(--text-muted);">{t(
                     "Capture or upload a nutrition label to see results and chat with AI",
                     "التقط أو ارفع صورة لملصق القيم الغذائية لرؤية النتائج والتحدث مع الذكاء الاصطناعي",
                     lang

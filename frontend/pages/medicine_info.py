@@ -54,7 +54,7 @@ if st.session_state.med_sources:
 # Follow-up buttons
 if st.session_state.med_followups:
     st.markdown(
-        f'<p style="font-size:13px;font-weight:600;color:#0a2540;margin-top:8px;">💡 {t("You might also ask:", "قد تسأل أيضاً:", lang)}</p>',
+        f'<p style="font-size:13px;font-weight:600;color:var(--text);margin-top:8px;">💡 {t("You might also ask:", "قد تسأل أيضاً:", lang)}</p>',
         unsafe_allow_html=True,
     )
     for fq in st.session_state.med_followups:
@@ -97,11 +97,11 @@ if question:
 
                 # Source badge
                 if src_type == "database":
-                    st.markdown('<span style="background:#dcfce7;color:#166534;padding:3px 10px;border-radius:12px;font-size:12px;">📦 DB</span>', unsafe_allow_html=True)
+                    st.markdown('<span style="background:#e8f5f0;color:#2a9e78;padding:3px 10px;border-radius:12px;font-size:12px;">📦 DB</span>', unsafe_allow_html=True)
                 elif src_type == "fda_api":
-                    st.markdown('<span style="background:#dbeafe;color:#1e40af;padding:3px 10px;border-radius:12px;font-size:12px;">🌐 FDA API</span>', unsafe_allow_html=True)
+                    st.markdown('<span style="background:#ddeef8;color:#185fa5;padding:3px 10px;border-radius:12px;font-size:12px;">🌐 FDA API</span>', unsafe_allow_html=True)
                 elif src_type == "web_search":
-                    st.markdown('<span style="background:#fef9c3;color:#854d0e;padding:3px 10px;border-radius:12px;font-size:12px;">🔍 Web</span>', unsafe_allow_html=True)
+                    st.markdown('<span style="background:#fef6e0;color:#854f0b;padding:3px 10px;border-radius:12px;font-size:12px;">🔍 Web</span>', unsafe_allow_html=True)
 
                 if answer_lang == "ar":
                     st.markdown(f'<div class="rtl">{answer}</div>', unsafe_allow_html=True)
@@ -128,10 +128,10 @@ if st.session_state.med_chat_history:
 # ── Empty state ───────────────────────────────────────────────────────────────
 if not st.session_state.med_chat_history:
     st.markdown(
-        f"""<div style="background:white;border:2px dashed #cbd5e1;border-radius:14px;
+        f"""<div style="background:var(--card);border:2px dashed rgba(61,191,148,0.3);border-radius:14px;
                      padding:48px;text-align:center;color:#94a3b8;margin-top:24px;">
             <div style="font-size:3rem;">💊</div>
-            <div style="font-size:1.1rem;font-weight:600;color:#475569;margin-top:12px;">
+            <div style="font-size:1.1rem;font-weight:600;color:var(--text-mid);margin-top:12px;">
                 {t("Ask about any medicine", "اسأل عن أي دواء", lang)}
             </div>
             <div style="font-size:0.88rem;margin-top:8px;">

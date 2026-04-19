@@ -1,78 +1,63 @@
-# Agentic RAG Health Assistant
+# 🏥 MediAssist — AI Health Platform
 
-A bilingual (Arabic + English) health question-answering system powered by Claude AI, Supabase vector search, and MCP tools.
+A bilingual **(Arabic + English)** AI health assistant built as a college project. Powered by Claude AI (Anthropic) and Supabase.
 
-## What It Does
+---
 
-- User asks a health question in Arabic or English
-- System searches a vector database first
-- If found (similarity > 0.75) → answers instantly from DB
-- If not found → searches the web, scrapes trusted sources, stores results, then answers
-- Next time the same question is asked → answered from DB instantly
+## ✨ Features — 8 AI Services
 
-## Tech Stack
-
-| Component | Technology |
+| Service | Description |
 |---|---|
-| LLM | Claude Sonnet (Anthropic API) |
-| Vector DB | Supabase pgvector |
-| Embeddings | multilingual-e5-large (HuggingFace) |
-| Web Search | Tavily API |
-| Web Scraping | BeautifulSoup / Firecrawl |
-| Medical Literature | PubMed NIH API |
-| Backend | Python + FastAPI |
-| Frontend | Streamlit |
+| 🩺 Health Q&A | Ask any health question — AI answers using RAG + trusted medical sources |
+| ⚖️ Health Calculators | BMI, daily calorie needs, ideal body weight |
+| 🩸 Lab Results Reader | Upload blood test PDF → plain-language explanation of every value |
+| 🚑 Emergency Triage | Guided yes/no symptom checker → care urgency level |
+| 💊 Medicine Info | Ask about dosage, side effects, and drug interactions |
+| 🥗 Food Nutrition Scanner | Type any food/meal → full nutritional breakdown |
+| 📸 Nutrition Label Scanner | Photo of nutrition label → AI reads it + chat Q&A about the data |
 
-## Project Structure
+---
 
-```
-RAG-MCP/
-├── app/
-│   ├── agent/          # Agent loop, tool executor, RAG pipeline
-│   ├── embeddings/     # Embedding model, chunker, document loader
-│   ├── mcp_tools/      # All MCP tools (search, scraper, calculators...)
-│   ├── retrieval/      # Supabase vector search and storage
-│   └── config.py       # Environment variables
-├── frontend/
-│   └── app.py          # Streamlit chat UI
-├── scripts/
-│   ├── seed_database.py    # Pre-populate DB with health documents
-│   └── test_supabase.py    # Test DB connection
-├── tests/
-│   └── test_pipeline.py    # Full pipeline tests
-├── data/
-│   ├── raw/            # Original documents
-│   └── processed/      # Processed chunks
-├── .env                # API keys (not committed)
-└── requirements.txt
-```
+## 🚀 Quick Start
 
-## Setup
-
-### 1. Clone and install dependencies
-
+### 1. Clone the repo
 ```bash
-python -m venv .venv
-.venv/Scripts/activate        # Windows
-source .venv/bin/activate     # Mac/Linux
+git clone https://github.com/IbrahimFahad/RAG-MCP-Health-Assistant.git
+cd RAG-MCP-Health-Assistant
+```
+
+### 2. Create a virtual environment
+```bash
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+# Mac/Linux:
+source venv/bin/activate
+```
+
+### 3. Install dependencies
+```bash
 pip install -r requirements.txt
 ```
 
-### 2. Configure API keys
-
-Copy `.env.example` to `.env` and fill in:
-
-```
-ANTHROPIC_API_KEY=your_key
-SUPABASE_URL=your_project_url
-SUPABASE_KEY=your_anon_key
-TAVILY_API_KEY=your_key
+### 4. Set up environment variables
+```bash
+cp .env.example .env
+# Edit .env and fill in your API keys
 ```
 
-### 3. Set up Supabase
+Required keys:
+- `ANTHROPIC_API_KEY` — [Get from Anthropic Console](https://console.anthropic.com)
+- `SUPABASE_URL` + `SUPABASE_KEY` — [Get from Supabase](https://supabase.com)
+- `TAVILY_API_KEY` — [Get from Tavily](https://tavily.com) (for web search fallback)
 
-Run in Supabase SQL Editor:
+Optional:
+- `FIRECRAWL_API_KEY` — web scraping fallback
+- `AZURE_DOC_INTEL_ENDPOINT` + `AZURE_DOC_INTEL_KEY` — Arabic PDF OCR
 
+### 5. Set up Supabase tables
+
+**For RAG (Health Q&A)** — run in your Supabase SQL Editor:
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector;
 
@@ -109,35 +94,94 @@ LANGUAGE SQL STABLE AS $$
 $$;
 ```
 
-### 4. Seed the database
+**For Nutrition Label Scanner** — run `scripts/nutrition_table.sql`
 
+### 6. Seed the knowledge base (optional)
 ```bash
 python scripts/seed_database.py
 ```
 
-### 5. Run the app
-
+### 7. Run the app
 ```bash
-python -m streamlit run frontend/app.py
+streamlit run frontend/app.py
 ```
 
-Open http://localhost:8501
+Open **http://localhost:8501**
 
-## MCP Tools
+---
 
-| Tool | Description |
+## 📁 Project Structure
+
+```
+RAG-MCP-Health-Assistant/
+├── app/
+│   ├── config.py                    # API keys and settings
+│   ├── services/                    # Business logic (one folder/file per service)
+│   │   ├── food_nutrition_scanner/
+│   │   ├── nutrition_scanner/
+│   │   ├── lab_reader.py
+│   │   ├── medicine_info.py
+│   │   └── triage.py
+│   ├── mcp_tools/                   # Shared AI utilities
+│   └── agent/                       # RAG pipeline and agent loop
+├── frontend/
+│   ├── app.py                       # Dashboard home page
+│   ├── utils.py                     # Sidebar, styles, dark/light mode, t() helper
+│   └── pages/                       # One .py file per page/service
+├── scripts/                         # SQL and setup scripts
+├── .env.example                     # Template for environment variables
+└── requirements.txt
+```
+
+---
+
+## ➕ How to Add a New Service (for collaborators)
+
+1. **Fork** this repo on GitHub
+2. **Create a branch**: `git checkout -b feature/my-service-name`
+3. **Create the service logic**:
+   ```
+   app/services/my_service/__init__.py   (empty)
+   app/services/my_service/service.py    (your logic)
+   ```
+4. **Create the page** `frontend/pages/my_service.py` — always start with:
+   ```python
+   import sys, os
+   sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+   from dotenv import load_dotenv
+   load_dotenv(override=True)
+   import streamlit as st
+   from frontend.utils import apply_global_styles, render_sidebar, t
+   st.set_page_config(page_title="My Service | MediAssist", page_icon="🔧", layout="wide", initial_sidebar_state="expanded")
+   apply_global_styles()
+   lang = render_sidebar(active="my_service")
+   ```
+5. **Add to sidebar** in `frontend/utils.py` — add a tuple to the `pages` list
+6. **Add a dashboard card** in `frontend/app.py`
+7. **Push and open a Pull Request** on GitHub
+
+---
+
+## 🛠️ Tech Stack
+
+| Component | Technology |
 |---|---|
-| web_search | Tavily web search for health info |
-| scrape_url | Extract content from medical websites |
-| pubmed_search | Search NIH PubMed for clinical studies |
-| store_to_db | Save new knowledge to vector DB |
-| calculate_bmi | BMI calculator with WHO classification |
-| calculate_bmr | Daily calorie needs calculator |
-| calculate_ideal_weight | Ideal body weight (Devine formula) |
+| LLM + Vision | Claude Sonnet 4.6 (Anthropic) |
+| Frontend | Streamlit — bilingual, dark/light mode |
+| Database | Supabase (pgvector for RAG + regular tables) |
+| Embeddings | `intfloat/multilingual-e5-large` |
+| Web Search | Tavily API |
+| Web Scraping | BeautifulSoup / Firecrawl |
+| Medical Literature | PubMed NIH API |
 
-## Arabic Support
+---
 
-- multilingual-e5-large embeds Arabic and English in the same vector space
-- Arabic query can match English documents and vice versa
-- Claude responds in the same language the user writes in
-- RTL layout in the frontend for Arabic text
+## 🤝 Contributing
+
+Pull requests are welcome! Fork → branch → commit → PR.
+
+---
+
+## ⚠️ Disclaimer
+
+MediAssist is a college project for **educational purposes only**. It does not replace professional medical advice. Always consult a qualified healthcare provider.

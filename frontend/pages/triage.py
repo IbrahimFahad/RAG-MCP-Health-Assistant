@@ -72,9 +72,9 @@ if st.session_state.triage_done:
     advice_html = advice_html.replace("\n", "<br>")
 
     st.markdown(
-        f"""<div style="background:white;border:1px solid #e2e8f0;border-radius:10px;
+        f"""<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;
                      padding:20px 24px;margin-bottom:20px;font-size:0.95rem;
-                     color:#1e293b;line-height:1.7;">
+                     color:var(--text);line-height:1.7;">
             {advice_html}
         </div>""",
         unsafe_allow_html=True,
@@ -87,10 +87,10 @@ if st.session_state.triage_done:
                 ans_label = (
                     (t("Yes", "نعم", lang) if ans else t("No", "لا", lang))
                 )
-                ans_color = "#22c55e" if ans else "#64748b"
+                ans_color = "#22c55e" if ans else "var(--text-muted)"
                 st.markdown(
                     f'<div style="padding:6px 0;border-bottom:1px solid #f1f5f9;">'
-                    f'<span style="color:#64748b;font-size:0.85rem;">{i}.</span> '
+                    f'<span style="color:var(--text-muted);font-size:0.85rem;">{i}.</span> '
                     f'{q} '
                     f'<span style="color:{ans_color};font-weight:600;">{ans_label}</span>'
                     f'</div>',
@@ -99,8 +99,8 @@ if st.session_state.triage_done:
 
     # Disclaimer
     st.markdown(
-        f"""<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;
-                     padding:12px 16px;font-size:0.82rem;color:#78350f;margin-top:8px;">
+        f"""<div style="background:#fef9ec;border-left:3px solid #f0b429;border:none;border-left:3px solid #f0b429;border-radius:8px;
+                     padding:12px 16px;font-size:0.82rem;color:#7a6030;margin-top:8px;">
             ⚠️ <b>{t("Disclaimer:", "إخلاء المسؤولية:", lang)}</b>
             {t(
                 "This triage tool provides general guidance only and does not replace professional "
@@ -128,19 +128,41 @@ else:
 
     # Progress indicator (max ~6 questions deep)
     step = len(st.session_state.triage_history) + 1
+    progress_pct = min(100, (step / 6) * 100)
     st.markdown(
-        f'<div style="font-size:0.8rem;color:#64748b;margin-bottom:8px;">'
-        f'{t("Question", "السؤال", lang)} {step}</div>',
+        f"""<div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span style="font-size:0.8rem;color:var(--text-muted);">{t("Question","السؤال",lang)} {step}</span>
+                <span style="font-size:0.75rem;color:var(--text-muted);">{step}/6</span>
+            </div>
+            <div style="height:4px;background:#e8f5f0;border-radius:2px;">
+                <div style="height:4px;background:#3dbf94;border-radius:2px;width:{progress_pct:.0f}%;transition:width 0.3s;"></div>
+            </div>
+        </div>""",
         unsafe_allow_html=True,
     )
+    st.markdown("""
+<style>
+div[data-testid="column"]:nth-child(1) .stButton > button:hover {
+    background: #fdeaea !important;
+    border-color: #e24b4a !important;
+    color: #e24b4a !important;
+}
+div[data-testid="column"]:nth-child(2) .stButton > button:hover {
+    background: #e8f5f0 !important;
+    border-color: #3dbf94 !important;
+    color: #2a9e78 !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
     # Question card
     question_text = get_question(current_node, lang)
     st.markdown(
-        f"""<div style="background:white;border:1px solid #e2e8f0;border-radius:14px;
+        f"""<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;
                      padding:28px 28px 24px;margin-bottom:20px;
                      box-shadow:0 2px 8px rgba(0,0,0,0.05);">
-            <div style="font-size:1.15rem;font-weight:600;color:#0a2540;line-height:1.5;">
+            <div style="font-size:1.15rem;font-weight:600;color:var(--text);line-height:1.5;">
                 {"<div class='rtl'>" if lang == "ar" else ""}{question_text}{"</div>" if lang == "ar" else ""}
             </div>
         </div>""",
@@ -185,10 +207,10 @@ else:
         )
         for q, ans in st.session_state.triage_history:
             ans_label = t("Yes", "نعم", lang) if ans else t("No", "لا", lang)
-            ans_color = "#22c55e" if ans else "#64748b"
+            ans_color = "#22c55e" if ans else "var(--text-muted)"
             short_q = q[:60] + "..." if len(q) > 60 else q
             st.markdown(
-                f'<div style="font-size:0.82rem;color:#64748b;padding:3px 0;">'
+                f'<div style="font-size:0.82rem;color:var(--text-muted);padding:3px 0;">'
                 f'{short_q} → <span style="color:{ans_color};font-weight:600;">{ans_label}</span>'
                 f'</div>',
                 unsafe_allow_html=True,

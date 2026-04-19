@@ -64,7 +64,7 @@ st.markdown("""
 .macro-item .value {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #0a2540;
+    color: var(--text);
 }
 .macro-item .label {
     font-size: 0.82rem;
@@ -95,7 +95,7 @@ st.markdown("""
 .micro-table td:last-child {
     font-weight: 600;
     text-align: right;
-    color: #0a2540;
+    color: var(--text);
 }
 .health-note {
     background: #ecfdf5;

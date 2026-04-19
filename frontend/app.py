@@ -15,135 +15,156 @@ st.set_page_config(
 )
 
 apply_global_styles()
-
 lang = render_sidebar(active="home")
+
+rtl = ' class="rtl"' if lang == "ar" else ""
 
 # ── Hero ──────────────────────────────────────────────────────────────────────
 st.markdown(f"""
-<div class="hero-section">
-    <div class="hero-content">
-        <h1>{"🏥 MediAssist" if lang == "en" else "🏥 ميدي أسيست"}</h1>
-        <p class="hero-subtitle">
+<div style="background:linear-gradient(120deg,#3dbf94 0%,#2a8fa8 100%);
+            border-radius:16px;padding:28px 32px;margin-bottom:20px;
+            display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+    <div{rtl}>
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:rgba(255,255,255,0.75);
+                    text-transform:uppercase;margin-bottom:6px;">
+            {"AI Health Platform" if lang == "en" else "منصة الصحة الذكية"}
+        </div>
+        <h1 style="font-size:1.8rem;font-weight:700;color:white;margin:0 0 8px;">
+            {"MediAssist" if lang == "en" else "ميدي أسيست"}
+        </h1>
+        <p style="font-size:0.95rem;color:rgba(255,255,255,0.85);margin:0 0 18px;max-width:480px;">
             {"Your AI-powered health companion — trusted answers in Arabic & English"
              if lang == "en" else
              "مساعدك الصحي الذكي — إجابات موثوقة بالعربية والإنجليزية"}
         </p>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+            <div>
+                <div style="font-size:1.3rem;font-weight:700;color:#f7f7f7;">7</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.7);">{"AI Services" if lang == "en" else "خدمات ذكاء اصطناعي"}</div>
+            </div>
+            <div>
+                <div style="font-size:1.3rem;font-weight:700;color:#f7f7f7;">2</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.7);">{"Languages" if lang == "en" else "لغتان"}</div>
+            </div>
+            <div>
+                <div style="font-size:1.3rem;font-weight:700;color:#f7f7f7;">Claude AI</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.7);">{"Powered by Anthropic" if lang == "en" else "مدعوم بـ Anthropic"}</div>
+            </div>
+        </div>
     </div>
+    <div style="font-size:5rem;opacity:0.25;user-select:none;">🏥</div>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("<br>", unsafe_allow_html=True)
+# ── Card helper ───────────────────────────────────────────────────────────────
+def _card(icon, icon_bg, title, desc, badge_html, coming=False):
+    opacity = "opacity:0.7;" if coming else ""
+    border  = "border:1.5px dashed rgba(61,191,148,0.25);" if coming else "border:1px solid rgba(60,150,110,0.12);"
+    return f"""
+    <div style="background:var(--card);border-radius:16px;{border}padding:20px 18px;
+                height:100%;{opacity}position:relative;transition:transform 0.15s,border-color 0.15s;
+                cursor:{'default' if coming else 'pointer'};">
+        <div style="width:40px;height:40px;background:{icon_bg};border-radius:10px;
+                    display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">
+            {icon}
+        </div>
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;">{title}</div>
+        <div style="font-size:12px;color:var(--text-mid);line-height:1.6;margin-bottom:12px;">{desc}</div>
+        {badge_html}
+    </div>"""
 
-# ── Service Cards ─────────────────────────────────────────────────────────────
-col1, col2, col3 = st.columns(3)
+badge_ok   = '<span style="background:#e8f5f0;color:#2a9e78;padding:3px 10px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">AVAILABLE</span>'
+badge_soon = '<span style="background:#e8f5f0;color:#8aab9f;padding:3px 10px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">COMING SOON</span>'
 
-with col1:
-    st.markdown(f"""
-    <div class="service-card available">
-        <div class="card-icon">🩺</div>
-        <h3>{"Health Q&A" if lang == "en" else "الأسئلة الصحية"}</h3>
-        <p>{"Ask any health question in Arabic or English. Powered by AI + trusted medical sources."
-            if lang == "en" else
-            "اسأل أي سؤال صحي بالعربية أو الإنجليزية. مدعوم بالذكاء الاصطناعي ومصادر طبية موثوقة."}</p>
-        <span class="badge-available">{"Available" if lang == "en" else "متاح"}</span>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("🩺 " + ("Open Health Q&A" if lang == "en" else "فتح الأسئلة الصحية"), use_container_width=True, key="btn_chat"):
-        st.switch_page("pages/chat.py")
+if lang == "ar":
+    badge_ok   = '<span style="background:#e8f5f0;color:#2a9e78;padding:3px 10px;border-radius:20px;font-size:9px;font-weight:700;">متاح</span>'
+    badge_soon = '<span style="background:#e8f5f0;color:#8aab9f;padding:3px 10px;border-radius:20px;font-size:9px;font-weight:700;">قريباً</span>'
 
-with col2:
-    st.markdown(f"""
-    <div class="service-card available">
-        <div class="card-icon">⚖️</div>
-        <h3>{"Health Calculators" if lang == "en" else "الحاسبات الصحية"}</h3>
-        <p>{"Calculate BMI, daily calorie needs, and ideal body weight instantly."
-            if lang == "en" else
-            "احسب مؤشر كتلة الجسم والسعرات الحرارية اليومية والوزن المثالي فوراً."}</p>
-        <span class="badge-available">{"Available" if lang == "en" else "متاح"}</span>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("⚖️ " + ("Open Calculators" if lang == "en" else "فتح الحاسبات"), use_container_width=True, key="btn_calc"):
-        st.switch_page("pages/calculators.py")
+# ── Row 1 ─────────────────────────────────────────────────────────────────────
+c1, c2, c3 = st.columns(3, gap="small")
+with c1:
+    st.markdown(_card("🩺","#ddeef8",
+        t("Health Q&A","الأسئلة الصحية",lang),
+        t("Ask any health question in Arabic or English. Powered by AI + trusted medical sources.",
+          "اسأل أي سؤال صحي. مدعوم بالذكاء الاصطناعي ومصادر طبية موثوقة.",lang),
+        badge_ok), unsafe_allow_html=True)
+    st.button("🩺 "+t("Open","فتح",lang), key="btn_chat", use_container_width=True,
+              on_click=lambda: st.switch_page("pages/chat.py"))
 
-with col3:
-    st.markdown(f"""
-    <div class="service-card available">
-        <div class="card-icon">🥗</div>
-        <h3>{"Food Nutrition Scanner" if lang == "en" else "ماسح التغذية الغذائية"}</h3>
-        <p>{"Enter any food or meal to get a detailed nutritional breakdown — calories, macros, micros, and health tips."
-            if lang == "en" else
-            "أدخل أي طعام أو وجبة للحصول على تحليل غذائي مفصّل — سعرات، مغذيات كبرى ودقيقة، ونصائح صحية."}</p>
-        <span class="badge-available">{"Available" if lang == "en" else "متاح"}</span>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("🥗 " + ("Open Food Scanner" if lang == "en" else "فتح ماسح التغذية"), use_container_width=True, key="btn_food_nutrition"):
-        st.switch_page("pages/food_nutrition_scanner.py")
+with c2:
+    st.markdown(_card("⚖️","#e8f8ee",
+        t("Health Calculators","الحاسبات الصحية",lang),
+        t("Calculate BMI, daily calorie needs, and ideal body weight instantly.",
+          "احسب مؤشر كتلة الجسم والسعرات الحرارية اليومية والوزن المثالي.",lang),
+        badge_ok), unsafe_allow_html=True)
+    st.button("⚖️ "+t("Open","فتح",lang), key="btn_calc", use_container_width=True,
+              on_click=lambda: st.switch_page("pages/calculators.py"))
 
-col4, col5, col6 = st.columns(3)
+with c3:
+    st.markdown(_card("🩸","#ede8fb",
+        t("Lab Results Reader","قارئ نتائج المختبر",lang),
+        t("Upload your blood test PDF — get a plain-language explanation of every value.",
+          "ارفع ملف PDF لنتائج الدم واحصل على شرح مبسط لكل قيمة.",lang),
+        badge_ok), unsafe_allow_html=True)
+    st.button("🩸 "+t("Open","فتح",lang), key="btn_lab", use_container_width=True,
+              on_click=lambda: st.switch_page("pages/lab_reader.py"))
 
-with col4:
-    st.markdown(f"""
-    <div class="service-card available">
-        <div class="card-icon">🩸</div>
-        <h3>{"Lab Results Reader" if lang == "en" else "قارئ نتائج المختبر"}</h3>
-        <p>{"Upload your blood test PDF and get a plain-language explanation of every value — normal ranges included."
-            if lang == "en" else
-            "ارفع ملف PDF لنتائج تحاليل الدم واحصل على شرح مبسط لكل قيمة مع المعدلات الطبيعية."}</p>
-        <span class="badge-available">{"Available" if lang == "en" else "متاح"}</span>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("🩸 " + ("Open Lab Reader" if lang == "en" else "فتح قارئ المختبر"), use_container_width=True, key="btn_lab"):
-        st.switch_page("pages/lab_reader.py")
+st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
-with col5:
-    st.markdown(f"""
-    <div class="service-card available">
-        <div class="card-icon">🚑</div>
-        <h3>{"Emergency Triage" if lang == "en" else "الفرز الطارئ"}</h3>
-        <p>{"Answer guided yes/no questions to find out how urgently you need medical care — from home management to call 911."
-            if lang == "en" else
-            "أجب على أسئلة موجّهة بنعم/لا لمعرفة مدى إلحاح حاجتك للرعاية الطبية — من الإدارة المنزلية إلى الاتصال بالطوارئ."}</p>
-        <span class="badge-available">{"Available" if lang == "en" else "متاح"}</span>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("🚑 " + ("Open Triage" if lang == "en" else "فتح الفرز الطارئ"), use_container_width=True, key="btn_triage"):
-        st.switch_page("pages/triage.py")
+# ── Row 2 ─────────────────────────────────────────────────────────────────────
+c4, c5, c6 = st.columns(3, gap="small")
+with c4:
+    st.markdown(_card("🚑","#fdeaea",
+        t("Emergency Triage","الفرز الطارئ",lang),
+        t("Answer guided yes/no questions — find out how urgently you need medical care.",
+          "أجب على أسئلة موجّهة لمعرفة مدى إلحاح حاجتك للرعاية الطبية.",lang),
+        badge_ok), unsafe_allow_html=True)
+    st.button("🚑 "+t("Open","فتح",lang), key="btn_triage", use_container_width=True,
+              on_click=lambda: st.switch_page("pages/triage.py"))
 
-with col6:
-    st.markdown(f"""
-    <div class="service-card available">
-        <div class="card-icon">💊</div>
-        <h3>{"Medicine Info" if lang == "en" else "معلومات الأدوية"}</h3>
-        <p>{"Upload medicine leaflets or paste drug info, then ask questions about dosage, side effects, and interactions."
-            if lang == "en" else
-            "ارفع نشرات الأدوية أو الصق معلومات الدواء، ثم اسأل عن الجرعة والآثار الجانبية والتفاعلات."}</p>
-        <span class="badge-available">{"Available" if lang == "en" else "متاح"}</span>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("💊 " + ("Open Medicine Info" if lang == "en" else "فتح معلومات الأدوية"), use_container_width=True, key="btn_med"):
-        st.switch_page("pages/medicine_info.py")
+with c5:
+    st.markdown(_card("💊","#fdeaf0",
+        t("Medicine Info","معلومات الأدوية",lang),
+        t("Ask about dosage, side effects, and drug interactions via AI chat.",
+          "اسأل عن الجرعة والآثار الجانبية والتفاعلات عبر الدردشة الذكية.",lang),
+        badge_ok), unsafe_allow_html=True)
+    st.button("💊 "+t("Open","فتح",lang), key="btn_med", use_container_width=True,
+              on_click=lambda: st.switch_page("pages/medicine_info.py"))
 
-col7, col8, col9 = st.columns(3)
+with c6:
+    st.markdown(_card("🥗","#e8f8ee",
+        t("Food Nutrition Scanner","ماسح التغذية الغذائية",lang),
+        t("Type any food or meal — get a detailed breakdown of calories, macros & health tips.",
+          "أدخل أي طعام أو وجبة للحصول على تحليل غذائي مفصّل.",lang),
+        badge_ok), unsafe_allow_html=True)
+    st.button("🥗 "+t("Open","فتح",lang), key="btn_food", use_container_width=True,
+              on_click=lambda: st.switch_page("pages/food_nutrition_scanner.py"))
 
-with col7:
-    st.markdown(f"""
-    <div class="service-card available">
-        <div class="card-icon">📸</div>
-        <h3>{"Nutrition Label Scanner" if lang == "en" else "ماسح ملصق القيم الغذائية"}</h3>
-        <p>{"Photograph a food nutrition label — AI reads every value, then you can chat with it about your diet."
-            if lang == "en" else
-            "صوّر ملصق القيم الغذائية — يقرأ الذكاء الاصطناعي كل القيم ثم يمكنك التحدث معه عن نظامك الغذائي."}</p>
-        <span class="badge-available">{"Available" if lang == "en" else "متاح"}</span>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("📸 " + ("Open Label Scanner" if lang == "en" else "فتح ماسح الملصق"), use_container_width=True, key="btn_label_scanner"):
-        st.switch_page("pages/nutrition_scanner.py")
+st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
 
-# ── Stats bar ─────────────────────────────────────────────────────────────────
-st.markdown("<br>", unsafe_allow_html=True)
-st.divider()
-s1, s2, s3, s4 = st.columns(4)
-s1.metric("📚 " + ("Knowledge Base" if lang == "en" else "قاعدة المعرفة"), "110+ " + ("Chunks" if lang == "en" else "جزء"))
-s2.metric("🌍 " + ("Languages" if lang == "en" else "اللغات"), "Arabic + English")
-s3.metric("🔬 " + ("Medical Sources" if lang == "en" else "المصادر الطبية"), "WHO, NHS, NIH+")
-s4.metric("🛠️ " + ("AI Tools" if lang == "en" else "أدوات الذكاء"), "7 MCP Tools")
+# ── Row 3 ─────────────────────────────────────────────────────────────────────
+c7, c8, c9 = st.columns(3, gap="small")
+with c7:
+    st.markdown(_card("📸","#fef6e0",
+        t("Nutrition Label Scanner","ماسح ملصق القيم الغذائية",lang),
+        t("Photograph a food label — AI reads every value, then chat about your diet.",
+          "صوّر ملصق القيم الغذائية — يقرأ الذكاء الاصطناعي كل القيم ثم تحادثه.",lang),
+        badge_ok), unsafe_allow_html=True)
+    st.button("📸 "+t("Open","فتح",lang), key="btn_label", use_container_width=True,
+              on_click=lambda: st.switch_page("pages/nutrition_scanner.py"))
+
+with c8:
+    st.markdown(_card("🧬","#e8f5f0",
+        t("Coming Soon","قريباً",lang),
+        t("A new health service is on the way. Stay tuned!",
+          "خدمة صحية جديدة قادمة قريباً. ترقّبوا!",lang),
+        badge_soon, coming=True), unsafe_allow_html=True)
+    st.button("🔒 "+t("Coming Soon","قريباً",lang), key="btn_cs1", use_container_width=True, disabled=True)
+
+with c9:
+    st.markdown(_card("🔬","#e8f5f0",
+        t("Coming Soon","قريباً",lang),
+        t("A new health service is on the way. Stay tuned!",
+          "خدمة صحية جديدة قادمة قريباً. ترقّبوا!",lang),
+        badge_soon, coming=True), unsafe_allow_html=True)
+    st.button("🔒 "+t("Coming Soon","قريباً",lang), key="btn_cs2", use_container_width=True, disabled=True)

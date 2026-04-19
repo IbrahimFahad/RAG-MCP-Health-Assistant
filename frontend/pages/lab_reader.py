@@ -132,7 +132,7 @@ if uploaded:
 
         st.markdown(
             f"### 🧪 {t('Your Results', 'نتائجك', lang)} "
-            f"<span style='font-size:0.9rem;color:#64748b;'>({len(results)} {t('tests', 'اختبارات', lang)})</span>",
+            f"<span style='font-size:0.9rem;color:var(--text-muted);'>({len(results)} {t('tests', 'اختبارات', lang)})</span>",
             unsafe_allow_html=True,
         )
 
@@ -141,7 +141,7 @@ if uploaded:
         leg_col1.markdown('<span style="background:#22c55e22;color:#166534;padding:3px 10px;border-radius:12px;font-size:0.8rem;">✅ Normal</span>', unsafe_allow_html=True)
         leg_col2.markdown('<span style="background:#ef444422;color:#991b1b;padding:3px 10px;border-radius:12px;font-size:0.8rem;">🔴 High</span>', unsafe_allow_html=True)
         leg_col3.markdown('<span style="background:#3b82f622;color:#1e3a8a;padding:3px 10px;border-radius:12px;font-size:0.8rem;">🔵 Low</span>', unsafe_allow_html=True)
-        leg_col4.markdown('<span style="background:#94a3b822;color:#475569;padding:3px 10px;border-radius:12px;font-size:0.8rem;">⚪ Unknown</span>', unsafe_allow_html=True)
+        leg_col4.markdown('<span style="background:#94a3b822;color:var(--text-mid);padding:3px 10px;border-radius:12px;font-size:0.8rem;">⚪ Unknown</span>', unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
 
@@ -164,19 +164,19 @@ if uploaded:
                                  border-radius:8px;padding:14px 18px;margin-bottom:10px;">
                         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
                             <div>
-                                <span style="font-weight:700;font-size:1rem;color:#0a2540;">{test}</span>
+                                <span style="font-weight:700;font-size:1rem;color:var(--text);">{test}</span>
                                 &nbsp;
                                 <span style="font-size:1.1rem;font-weight:700;color:{color};">
                                     {value} {unit}
                                 </span>
                             </div>
-                            <div style="display:flex;gap:16px;font-size:0.85rem;color:#475569;">
+                            <div style="display:flex;gap:16px;font-size:0.85rem;color:var(--text-mid);">
                                 <span>📏 {t("Normal", "المعدل الطبيعي", lang)}: <b>{n_range} {unit}</b></span>
                                 <span style="background:{color}22;color:{color};padding:2px 10px;
                                              border-radius:12px;font-weight:600;">{emoji} {status.capitalize()}</span>
                             </div>
                         </div>
-                        {f'<div style="margin-top:8px;font-size:0.88rem;color:#475569;line-height:1.5;">{explain}</div>' if explain else ''}
+                        {f'<div style="margin-top:8px;font-size:0.88rem;color:var(--text-mid);line-height:1.5;">{explain}</div>' if explain else ''}
                     </div>""",
                     unsafe_allow_html=True,
                 )
@@ -188,17 +188,30 @@ if uploaded:
         low_count     = sum(1 for r in results if r.get("status", "").lower() == "low")
         unknown_count = sum(1 for r in results if r.get("status", "").lower() == "unknown")
 
-        sc1, sc2, sc3, sc4 = st.columns(4)
-        sc1.metric("✅ " + t("Normal",  "طبيعي",  lang), normal_count)
-        sc2.metric("🔴 " + t("High",    "مرتفع",  lang), high_count)
-        sc3.metric("🔵 " + t("Low",     "منخفض",  lang), low_count)
-        sc4.metric("⚪ " + t("Unknown", "غير معروف", lang), unknown_count)
+        st.markdown(f"""
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0 4px;">
+    <div style="background:#e8f5f0;border-radius:12px;padding:18px;text-align:center;">
+        <div style="font-size:2.2rem;font-weight:700;color:#2a9e78;">{normal_count}</div>
+        <div style="font-size:0.88rem;font-weight:600;color:#2a9e78;">✅ {t("Normal","طبيعي",lang)}</div>
+    </div>
+    <div style="background:#fdeaea;border-radius:12px;padding:18px;text-align:center;">
+        <div style="font-size:2.2rem;font-weight:700;color:#a32d2d;">{high_count}</div>
+        <div style="font-size:0.88rem;font-weight:600;color:#a32d2d;">🔴 {t("High","مرتفع",lang)}</div>
+    </div>
+    <div style="background:#e8f0fe;border-radius:12px;padding:18px;text-align:center;">
+        <div style="font-size:2.2rem;font-weight:700;color:#185fa5;">{low_count}</div>
+        <div style="font-size:0.88rem;font-weight:600;color:#185fa5;">🔵 {t("Low","منخفض",lang)}</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+        if unknown_count:
+            st.caption(f"⚪ {unknown_count} {t('result(s) with unknown status','نتيجة/نتائج بحالة غير معروفة',lang)}")
 
         # ── Disclaimer ─────────────────────────────────────────────────────────
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(
-            f"""<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;
-                         padding:12px 16px;font-size:0.82rem;color:#78350f;">
+            f"""<div style="background:#fef9ec;border-left:3px solid #f0b429;border:none;border-left:3px solid #f0b429;border-radius:8px;
+                         padding:12px 16px;font-size:0.82rem;color:#7a6030;">
                 ⚠️ <b>{t("Medical Disclaimer:", "إخلاء المسؤولية الطبية:", lang)}</b>
                 {t(
                     "This analysis is generated by AI and is for informational purposes only. "
@@ -215,11 +228,18 @@ if uploaded:
 
 else:
     # ── Upload placeholder ─────────────────────────────────────────────────────
+    st.markdown("""<style>
+.upload-zone:hover {
+    border-color: rgba(61,191,148,0.7) !important;
+    background: #e8f5f0 !important;
+    transition: all 0.2s;
+}
+</style>""", unsafe_allow_html=True)
     st.markdown(
-        f"""<div style="background:white;border:2px dashed #cbd5e1;border-radius:14px;
-                     padding:48px;text-align:center;color:#94a3b8;">
+        f"""<div class="upload-zone" style="background:var(--card);border:2px dashed rgba(61,191,148,0.3);border-radius:14px;
+                     padding:48px;text-align:center;color:#94a3b8;cursor:pointer;transition:all 0.2s;">
             <div style="font-size:3rem;">🩸</div>
-            <div style="font-size:1.1rem;font-weight:600;color:#475569;margin-top:12px;">
+            <div style="font-size:1.1rem;font-weight:600;color:var(--text-mid);margin-top:12px;">
                 {t("Upload a PDF lab report to get started", "ارفع ملف PDF لتقرير المختبر للبدء", lang)}
             </div>
             <div style="font-size:0.88rem;margin-top:8px;">
