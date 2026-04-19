@@ -403,6 +403,7 @@ def render_sidebar(active: str = "home") -> str:
             ("nutrition_scanner",      "📸", "Nutrition Label Scanner",   "ماسح ملصق القيم الغذائية",   "pages/nutrition_scanner"),
             ("outdoor_activity",       "🌤️", "Outdoor Activity Advisor",  "مستشار النشاط الخارجي",      "pages/outdoor_activity"),
             ("drug_interactions",      "⚗️", "Drug Interaction Checker",  "فاحص التفاعلات الدوائية",    "pages/drug_interactions"),
+            ("restaurant_nutrition",   "🍽️", "Restaurant Nutrition",      "تغذية المطاعم",               "pages/restaurant_nutrition"),
         ]
 
         for key, icon, label_en, label_ar, page_path in pages:

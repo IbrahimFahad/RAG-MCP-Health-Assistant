@@ -39,7 +39,7 @@ st.markdown(f"""
         </p>
         <div style="display:flex;gap:24px;flex-wrap:wrap;">
             <div>
-                <div style="font-size:1.3rem;font-weight:700;color:#f7f7f7;">9</div>
+                <div style="font-size:1.3rem;font-weight:700;color:#f7f7f7;">10</div>
                 <div style="font-size:10px;color:rgba(255,255,255,0.7);">{"AI Services" if lang == "en" else "خدمات ذكاء اصطناعي"}</div>
             </div>
             <div>
@@ -170,3 +170,30 @@ with c9:
         badge_ok), unsafe_allow_html=True)
     if st.button("⚗️ "+t("Open","فتح",lang), key="btn_drugix", use_container_width=True):
         st.switch_page("pages/drug_interactions.py")
+
+st.markdown("<div style='height:10px'></div>", unsafe_allow_html=True)
+
+# ── Row 4 ─────────────────────────────────────────────────────────────────────
+c10, c11, c12 = st.columns(3, gap="small")
+with c10:
+    st.markdown(_card("🍽️","#fef3e8",
+        t("Restaurant Nutrition","تغذية المطاعم",lang),
+        t("Browse calories & nutrition for 14+ Saudi restaurant chains — Al Baik, KFC, McDonald's & more.",
+          "تصفح السعرات والقيم الغذائية لأكثر من 14 مطعم سعودي — البيك، كنتاكي، ماكدونالدز والمزيد.",lang),
+        badge_ok), unsafe_allow_html=True)
+    if st.button("🍽️ "+t("Open","فتح",lang), key="btn_rest", use_container_width=True):
+        st.switch_page("pages/restaurant_nutrition.py")
+
+with c11:
+    st.markdown(_card("🔬","#f0e8fb",
+        t("Coming Soon","قريباً",lang),
+        t("More AI health services are on the way.",
+          "المزيد من خدمات الصحة الذكية قريباً.",lang),
+        badge_soon, coming=True), unsafe_allow_html=True)
+
+with c12:
+    st.markdown(_card("🧬","#e8f0fb",
+        t("Coming Soon","قريباً",lang),
+        t("More AI health services are on the way.",
+          "المزيد من خدمات الصحة الذكية قريباً.",lang),
+        badge_soon, coming=True), unsafe_allow_html=True)
