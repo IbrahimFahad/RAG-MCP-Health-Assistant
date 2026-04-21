@@ -69,7 +69,7 @@ def process_query(query: str, chat_history: list = None) -> dict:
     followups = generate_followups(query, raw_answer, language=language)
 
     # ── Step 7: Merge sources ────────────────────────────────────────────────
-    all_sources = list(set(retrieval["sources"] + agent_result["sources"]))
+    all_sources = list(dict.fromkeys(retrieval["sources"] + agent_result["sources"]))
 
     return {
         "answer":      final_answer,

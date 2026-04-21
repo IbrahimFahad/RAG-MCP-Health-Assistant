@@ -150,7 +150,7 @@ if user_input:
         "sources": result["sources"], "followups": result["followups"],
     })
     st.session_state.agent_history.append({"role": "user", "content": user_input})
-    st.session_state.agent_history.append({"role": "assistant", "content": result["answer"][:500]})
+    st.session_state.agent_history.append({"role": "assistant", "content": result["answer"][:2000]})
 
 if st.session_state.messages:
     if st.button(t("🗑️ Clear chat", "🗑️ مسح المحادثة", lang)):

@@ -25,10 +25,13 @@ def execute_tool(tool_name: str, tool_input: dict) -> dict:
                 query=tool_input["query"],
                 max_results=tool_input.get("max_results", 5)
             )
-            # Filter to trusted sources only
+            # Filter to trusted sources only — never fall back to untrusted results
             trusted = [r for r in results if validate_source(r["url"])["trusted"]]
-            used = trusted if trusted else results  # fallback to all if none trusted
-            return {"results": used, "count": len(used), "filtered_untrusted": len(results) - len(used)}
+            filtered = len(results) - len(trusted)
+            if not trusted:
+                return {"results": [], "count": 0, "filtered_untrusted": filtered,
+                        "message": "No trusted sources found. Try rephrasing your query."}
+            return {"results": trusted, "count": len(trusted), "filtered_untrusted": filtered}
 
         elif tool_name == "scrape_url":
             return scrape(url=tool_input["url"])

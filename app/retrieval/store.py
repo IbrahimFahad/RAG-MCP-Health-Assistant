@@ -27,11 +27,12 @@ def store_chunks(chunks: list[dict]) -> list[int]:
 
     Returns list of inserted row IDs.
     """
-    client = get_client()
-    inserted_ids = []
+    if not chunks:
+        return []
 
-    for i, chunk in enumerate(chunks):
-        row = {
+    client = get_client()
+    rows = [
+        {
             "content":     chunk["content"],
             "embedding":   chunk["embedding"],
             "source_url":  chunk.get("source_url", ""),
@@ -40,11 +41,12 @@ def store_chunks(chunks: list[dict]) -> list[int]:
             "source_type": chunk.get("source_type", "manual"),
             "metadata":    chunk.get("metadata", {}),
         }
-        result = client.table("health_knowledge").insert(row).execute()
-        inserted_id = result.data[0]["id"]
-        inserted_ids.append(inserted_id)
-        print(f"  Stored chunk {i+1}/{len(chunks)} -> id: {inserted_id}")
+        for chunk in chunks
+    ]
 
+    result = client.table("health_knowledge").insert(rows).execute()
+    inserted_ids = [r["id"] for r in result.data]
+    print(f"  Stored {len(inserted_ids)} chunks in one batch.")
     return inserted_ids
 
 def ingest_file(file_path: str) -> list[int]:

@@ -5,12 +5,20 @@ Sends the user query to Claude, handles tool calls, and returns the final answer
 from dotenv import load_dotenv
 load_dotenv(override=True)
 
+import re
 import json
 import anthropic
 
 from app.config import ANTHROPIC_API_KEY
 from app.agent.tool_definitions import TOOL_DEFINITIONS
 from app.agent.tool_executor import execute_tool
+
+MAX_QUERY_LENGTH = 2000
+
+def _sanitize_input(text: str) -> str:
+    """Strip control characters and cap length to prevent prompt injection."""
+    text = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]", "", text)
+    return text[:MAX_QUERY_LENGTH].strip()
 
 _client = None
 
@@ -77,6 +85,7 @@ def run_agent(
     """
     client = get_client()
     system_prompt = build_system_prompt(language)
+    user_query = _sanitize_input(user_query)
 
     # Build the initial user message
     if db_context:

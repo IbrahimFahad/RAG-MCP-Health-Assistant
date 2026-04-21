@@ -20,12 +20,26 @@ def get_client():
     return _client
 
 
+MAX_PDF_SIZE_MB = 10
+MAX_PDF_PAGES = 30
+
 def extract_text_from_pdf(file_bytes: bytes) -> str:
-    """Extract raw text from uploaded PDF bytes."""
+    """Extract raw text from uploaded PDF bytes (max 10 MB, 30 pages)."""
+    size_mb = len(file_bytes) / (1024 * 1024)
+    if size_mb > MAX_PDF_SIZE_MB:
+        raise ValueError(
+            f"PDF is too large ({size_mb:.1f} MB). Maximum allowed size is {MAX_PDF_SIZE_MB} MB."
+        )
     doc = fitz.open(stream=file_bytes, filetype="pdf")
-    pages = [page.get_text("text") for page in doc]
+    pages = []
+    for i, page in enumerate(doc):
+        if i >= MAX_PDF_PAGES:
+            break
+        text = page.get_text("text").strip()
+        if text:
+            pages.append(text)
     doc.close()
-    return "\n\n".join(p.strip() for p in pages if p.strip())
+    return "\n\n".join(pages)
 
 
 def analyze_lab_results(text: str, language: str = "en") -> dict:
@@ -68,7 +82,7 @@ Below is text extracted from a patient's lab report. Extract ALL lab test result
 If you cannot find lab values, return: {{"error": "No lab values found in this document."}}
 
 Lab report text:
-{text[:4000]}
+{text[:15000]}
 
 Return only valid JSON, no extra text."""
 

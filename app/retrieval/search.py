@@ -80,7 +80,7 @@ def retrieve(query: str) -> dict:
         "results":    results,
         "best_score": round(results[0]["similarity"], 4),
         "context":    "\n\n---\n\n".join(context_parts),
-        "sources":    list(set(sources)),   # deduplicate
+        "sources":    list(dict.fromkeys(sources)),   # deduplicate, preserve order
     }
 
 
@@ -107,7 +107,8 @@ def should_use_web(retrieval_result: dict, confidence_threshold: float = None) -
     if retrieval_result["best_score"] < confidence_threshold:
         return True
 
-    if len(retrieval_result["context"].strip()) < 100:
+    # Treat very short context as a low-quality hit and fall back to web
+    if len(retrieval_result["context"].strip()) < 50:
         return True
 
     return False
