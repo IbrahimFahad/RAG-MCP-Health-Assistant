@@ -6,6 +6,7 @@ load_dotenv(override=True)
 
 import streamlit as st
 from frontend.utils import apply_global_styles, render_sidebar, t
+from app.services.restaurant_nutrition.data import RESTAURANTS
 from app.services.restaurant_nutrition.service import (
     get_all_restaurants,
     get_restaurant_menu,
@@ -92,31 +93,6 @@ if "rest_chat" not in st.session_state:
 
 all_restaurants = get_all_restaurants()
 
-# ── Restaurant selector ───────────────────────────────────────────────────────
-st.markdown(f"<div style='font-size:12px;color:var(--text-muted);margin-bottom:6px;'>{t('Select a restaurant (or browse all):','اختر مطعمًا (أو تصفح الكل):',lang)}</div>", unsafe_allow_html=True)
-
-cols = st.columns(len(all_restaurants) + 1)
-with cols[0]:
-    if st.button(f"🌍 {t('All','الكل',lang)}", key="btn_all", use_container_width=True):
-        st.session_state.rest_key = None
-        st.session_state.rest_chat = []
-        st.rerun()
-
-for i, rest in enumerate(all_restaurants):
-    with cols[i + 1]:
-        label = rest["name_ar"] if lang == "ar" else rest["name_en"]
-        is_active = st.session_state.rest_key == rest["key"]
-        btn_type = "primary" if is_active else "secondary"
-        if st.button(f"{rest['emoji']} {label}", key=f"rb_{rest['key']}", use_container_width=True, type=btn_type):
-            if st.session_state.rest_key == rest["key"]:
-                st.session_state.rest_key = None
-            else:
-                st.session_state.rest_key = rest["key"]
-                st.session_state.rest_chat = []
-            st.rerun()
-
-st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
-
 # ── Active restaurant banner ──────────────────────────────────────────────────
 selected_key = st.session_state.rest_key
 selected_rest = get_restaurant_menu(selected_key) if selected_key else None
@@ -153,8 +129,11 @@ def cal_color(cal: int) -> str:
 
 def item_card_html(item: dict, show_rest: bool = False) -> str:
     bg, fg = cal_color(item["calories"])
-    name = item["name_ar"] if lang == "ar" else item["name_en"]
-    rest_tag = f"<span style='font-size:11px;color:var(--text-muted);margin-left:8px;'>{item.get('restaurant_emoji','')} {item.get('restaurant_en','')}</span>" if show_rest else ""
+    # Support both DB column names and legacy dict keys
+    name = item.get("item_name_ar") or item.get("name_ar", "") if lang == "ar" else item.get("item_name") or item.get("name_en", "")
+    rest_emoji = item.get("restaurant_emoji", "")
+    rest_name  = item.get("restaurant_name") or item.get("restaurant_en", "")
+    rest_tag = f"<span style='font-size:11px;color:var(--text-muted);margin-left:8px;'>{rest_emoji} {rest_name}</span>" if show_rest else ""
     return f"""
 <div class="item-card">
   <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
@@ -173,15 +152,10 @@ def item_card_html(item: dict, show_rest: bool = False) -> str:
 
 # ── TAB 1: Browse Menu ────────────────────────────────────────────────────────
 with tab_browse:
-    scope_restaurants = [selected_rest] if selected_rest else [r for r in RESTAURANTS.values()]
-
-    # Import RESTAURANTS for direct access
-    from app.services.restaurant_nutrition.data import RESTAURANTS as _DATA
-
     if selected_rest:
         scope = {selected_key: selected_rest}
     else:
-        scope = _DATA
+        scope = RESTAURANTS
 
     for key, rest in scope.items():
         rname = rest["name_ar"] if lang == "ar" else rest["name_en"]
