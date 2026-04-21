@@ -404,6 +404,7 @@ def render_sidebar(active: str = "home") -> str:
             ("outdoor_activity",       "🌤️", "Outdoor Activity Advisor",  "مستشار النشاط الخارجي",      "pages/outdoor_activity"),
             ("drug_interactions",      "⚗️", "Drug Interaction Checker",  "فاحص التفاعلات الدوائية",    "pages/drug_interactions"),
             ("restaurant_nutrition",   "🍽️", "Restaurant Nutrition",      "تغذية المطاعم",               "pages/restaurant_nutrition"),
+            ("symptom_checker",        "🔍", "Symptom Checker",           "مدقق الأعراض",                "pages/symptom_checker"),
         ]
 
         for key, icon, label_en, label_ar, page_path in pages:

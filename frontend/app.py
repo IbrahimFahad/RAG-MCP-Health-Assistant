@@ -39,7 +39,7 @@ st.markdown(f"""
         </p>
         <div style="display:flex;gap:24px;flex-wrap:wrap;">
             <div>
-                <div style="font-size:1.3rem;font-weight:700;color:#f7f7f7;">10</div>
+                <div style="font-size:1.3rem;font-weight:700;color:#f7f7f7;">11</div>
                 <div style="font-size:10px;color:rgba(255,255,255,0.7);">{"AI Services" if lang == "en" else "خدمات ذكاء اصطناعي"}</div>
             </div>
             <div>
@@ -185,11 +185,13 @@ with c10:
         st.switch_page("pages/restaurant_nutrition.py")
 
 with c11:
-    st.markdown(_card("🔬","#f0e8fb",
-        t("Coming Soon","قريباً",lang),
-        t("More AI health services are on the way.",
-          "المزيد من خدمات الصحة الذكية قريباً.",lang),
-        badge_soon, coming=True), unsafe_allow_html=True)
+    st.markdown(_card("🔍","#e8f0fb",
+        t("Symptom Checker","مدقق الأعراض",lang),
+        t("Describe your symptoms — Claude AI identifies possible conditions, assesses urgency, and explains results.",
+          "صف أعراضك — يحدد Claude AI الحالات المحتملة ويقيّم الإلحاح ويشرح النتائج.",lang),
+        badge_ok), unsafe_allow_html=True)
+    if st.button("🔍 "+t("Open","فتح",lang), key="btn_symptom", use_container_width=True):
+        st.switch_page("pages/symptom_checker.py")
 
 with c12:
     st.markdown(_card("🧬","#e8f0fb",
